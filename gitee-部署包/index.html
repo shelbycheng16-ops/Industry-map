@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>现代社会产业全景图谱 | 三百六十行</title>
+<style>
+  :root{
+    --bg:#0b1120; --panel:#121a2b; --panel2:#182238; --border:#26324a;
+    --text:#e6ecf5; --text-dim:#93a1bd; --accent:#e0b954; --accent2:#4fc3f7;
+    --danger:#ff6b6b; --radius:12px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;background:
+    radial-gradient(circle at 20% -10%, #1a2740 0%, var(--bg) 55%) fixed;color:var(--text);}
+  header{padding:22px 28px 14px;border-bottom:1px solid var(--border);
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;
+    background:linear-gradient(180deg, rgba(224,185,84,0.06), transparent);}
+  header h1{margin:0;font-size:22px;letter-spacing:1px;}
+  header h1 span{color:var(--accent);}
+  header .sub{color:var(--text-dim);font-size:12.5px;margin-top:4px;}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;}
+  .tab-btn{background:var(--panel2);border:1px solid var(--border);color:var(--text-dim);
+    padding:9px 16px;border-radius:999px;cursor:pointer;font-size:13.5px;transition:.15s;white-space:nowrap;}
+  .tab-btn:hover{color:var(--text);border-color:var(--accent2);}
+  .tab-btn.active{background:var(--accent);color:#1a1305;border-color:var(--accent);font-weight:600;}
+  .searchWrap{position:relative;}
+  #searchBox{background:var(--panel2);border:1px solid var(--border);color:var(--text);
+    padding:9px 14px;border-radius:999px;font-size:13.5px;width:220px;outline:none;}
+  #searchBox:focus{border-color:var(--accent2);}
+  #searchResults{position:absolute;top:42px;right:0;width:280px;background:var(--panel);
+    border:1px solid var(--border);border-radius:10px;max-height:320px;overflow:auto;
+    display:none;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.5);}
+  #searchResults div{padding:9px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--border);}
+  #searchResults div:last-child{border-bottom:none;}
+  #searchResults div:hover{background:var(--panel2);color:var(--accent2);}
+  #searchResults .tag{color:var(--text-dim);font-size:11px;margin-left:6px;}
+
+  main{padding:18px 28px 40px;max-width:1500px;margin:0 auto;}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:10px;}
+  .hint{color:var(--text-dim);font-size:12.5px;}
+  .resetBtn{background:var(--panel2);border:1px solid var(--border);color:var(--text-dim);
+    padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12.5px;}
+  .resetBtn:hover{color:var(--accent2);border-color:var(--accent2);}
+
+  .chartCard{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:8px;box-shadow:0 8px 24px rgba(0,0,0,.25);}
+  #sunburst{width:100%;height:640px;}
+  #chinaMap{width:100%;height:640px;}
+  #worldMap{width:100%;height:640px;}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:12px 2px 4px;}
+  .legend .chip{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-dim);}
+  .legend .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+
+  .mapLayout{display:flex;gap:16px;align-items:flex-start;}
+  .mapLayout .chartCard{flex:1;min-width:0;}
+  .sidePanel{width:300px;flex-shrink:0;background:var(--panel);border:1px solid var(--border);
+    border-radius:var(--radius);padding:16px;min-height:640px;}
+  .sidePanel h3{margin:0 0 4px;font-size:17px;color:var(--accent);}
+  .sidePanel .placeholder{color:var(--text-dim);font-size:13px;line-height:1.7;margin-top:40px;text-align:center;}
+  .sidePanel .indChips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px;}
+  .sidePanel .indChips span{background:var(--panel2);border:1px solid var(--border);color:var(--accent2);
+    font-size:11.5px;padding:3px 9px;border-radius:999px;}
+  .coCard{background:var(--panel2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;
+    margin-bottom:9px;cursor:pointer;transition:.15s;}
+  .coCard:hover{border-color:var(--accent);transform:translateX(2px);}
+  .coCard b{font-size:13.5px;}
+  .coCard p{margin:5px 0 0;font-size:12px;color:var(--text-dim);line-height:1.5;}
+
+  @media (max-width:980px){
+    .mapLayout{flex-direction:column;}
+    .sidePanel{width:100%;min-height:auto;}
+  }
+
+  .modalMask{position:fixed;inset:0;background:rgba(4,8,18,.65);backdrop-filter:blur(2px);
+    display:none;align-items:center;justify-content:center;z-index:100;}
+  .modalMask.show{display:flex;}
+  .modalBox{width:min(480px,90vw);background:var(--panel);border:1px solid var(--border);
+    border-radius:16px;padding:26px 26px 22px;box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative;
+    animation:pop .18s ease;}
+  @keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
+  .modalBox .close{position:absolute;top:14px;right:16px;cursor:pointer;color:var(--text-dim);font-size:20px;}
+  .modalBox .close:hover{color:var(--danger);}
+  .modalBox .tagRow{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .modalBox .tagRow span{font-size:11.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--border);color:var(--text-dim);}
+  .modalBox h2{margin:0 0 12px;font-size:21px;}
+  .modalBox .modelLabel{font-size:12px;color:var(--accent);margin-bottom:6px;letter-spacing:1px;}
+  .modalBox p.desc{font-size:14.5px;line-height:1.9;color:var(--text);margin:0;}
+
+  footer{text-align:center;color:var(--text-dim);font-size:11.5px;padding:20px;opacity:.7;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>现代社会<span>产业全景图谱</span></h1>
+    <div class="sub">三百六十行 · 行行出状元 — 16大产业板块 · 上中下游产业链 · 点击企业查看商业模式</div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" data-view="v-tree">🌐 产业链全景旭日图</button>
+    <button class="tab-btn" data-view="v-cn">🗺️ 中国产业地图</button>
+    <button class="tab-btn" data-view="v-world">🌍 全球产业地图</button>
+  </div>
+  <div class="searchWrap">
+    <input id="searchBox" placeholder="搜索企业 / 行业…" autocomplete="off">
+    <div id="searchResults"></div>
+  </div>
+</header>
+
+<main>
+
+  <div id="v-tree" class="view active">
+    <div class="toolbar">
+      <div class="hint">点击色块可逐层放大查看「板块 → 上中下游 → 代表企业」，点击中心圆可返回上一层；点击企业名查看商业模式简述</div>
+      <button class="resetBtn" id="resetTree">重置视图</button>
+    </div>
+    <div class="chartCard"><div id="sunburst"></div></div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <div id="v-cn" class="view">
+    <div class="toolbar">
+      <div class="hint">鼠标滚轮缩放、拖拽平移；点击省份查看当地代表产业集群与龙头企业</div>
+      <button class="resetBtn" id="resetCN">重置视图</button>
+    </div>
+    <div class="mapLayout">
+      <div class="chartCard"><div id="chinaMap"></div></div>
+      <div class="sidePanel" id="cnPanel"><div class="placeholder">👈 点击地图上的省份<br>查看当地产业集群与代表企业</div></div>
+    </div>
+  </div>
+
+  <div id="v-world" class="view">
+    <div class="toolbar">
+      <div class="hint">鼠标滚轮缩放、拖拽平移；点击国家/地区查看当地代表产业与龙头企业</div>
+      <button class="resetBtn" id="resetWorld">重置视图</button>
+    </div>
+    <div class="mapLayout">
+      <div class="chartCard"><div id="worldMap"></div></div>
+      <div class="sidePanel" id="worldPanel"><div class="placeholder">👈 点击地图上的国家/地区<br>查看当地产业集群与代表企业</div></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>数据为示意性整理，聚焦代表性行业与企业，用于宏观认知产业结构，不构成投资建议。</footer>
+
+<div class="modalMask" id="modalMask">
+  <div class="modalBox">
+    <span class="close" id="modalClose">✕</span>
+    <div class="tagRow" id="modalTags"></div>
+    <h2 id="modalTitle"></h2>
+    <div class="modelLabel">商业模式简述</div>
+    <p class="desc" id="modalDesc"></p>
+  </div>
+</div>
+
+<script>
+/* ========================= 数据层 ========================= */
+function sec(name,color,chains){return {name:name,color:color,chains:chains};}
+function stage(name,companies){return {stage:name,companies:companies};}
+function co(name,model){return {name:name,model:model};}
+
+const SECTORS = [
+  sec('农林牧渔业','#4CAF50',[
+    stage('上游·种养殖',[
+      co('隆平高科','全球领先的杂交水稻种子研发企业，通过专利品种研发与种子销售获利，构建"育繁推一体化"商业模式。'),
+      co('牧原股份','生猪养殖全产业链自繁自养，依托规模化、低成本自繁自养模式赚取生猪出栏价差。'),
+      co('温氏股份','"公司+农户"轻资产代养模式，公司提供种苗饲料技术，农户代养分成，降低固定资产投入。')
+    ]),
+    stage('中游·加工贸易',[
+      co('中粮集团','全球农产品贸易与粮油加工一体化央企，通过"种植-仓储物流-加工-贸易"全链条赚取加工增值与贸易价差。'),
+      co('双汇发展','生猪屠宰及肉制品深加工企业，通过屠宰产能利用率与高毛利低温肉制品品牌溢价盈利。')
+    ]),
+    stage('下游·品牌消费',[
+      co('伊利股份','全国性乳制品品牌商，依托奶源基地、渠道网络与品牌营销实现终端产品溢价销售。'),
+      co('海天味业','调味品行业龙头，依托强大经销商网络与品牌复购率构建"渠道为王"快消模式。')
+    ])
+  ]),
+  sec('能源与矿产','#795548',[
+    stage('上游·资源勘探开采',[
+      co('中国石油','油气一体化央企，勘探开采、管道运输、炼化销售全产业链，承担国家能源保供职能。'),
+      co('中国神华','煤炭一体化企业，自有煤矿开采+铁路港口运输+自建电厂，通过"煤电路港航"一体化平抑周期波动。'),
+      co('紫金矿业','全球化金属矿业公司，通过低成本收购海外矿山资源、技术提升回收率获取矿产资源溢价。')
+    ]),
+    stage('中游·炼化加工',[
+      co('中国石化','全球最大炼油公司之一，原油采购—炼制—成品油及化工品销售一体化运营。'),
+      co('陕西煤业','陕北优质动力煤开采洗选企业，以长协价+市场价结合方式销售给电厂钢厂客户。')
+    ]),
+    stage('下游·终端能源与新能源',[
+      co('国家电网','电力输配电网络运营商，通过购销价差及输配电费获取稳定收益，承担电网普遍服务。'),
+      co('隆基绿能','全球光伏组件龙头，通过硅片—电池片—组件垂直一体化制造降本，面向电站开发商销售。')
+    ])
+  ]),
+  sec('化工与新材料','#9C27B0',[
+    stage('上游·基础化工原料',[
+      co('万华化学','全球MDI（聚氨酯原料）龙头，依托自主技术壁垒与规模化装置获取高附加值化工品利润。'),
+      co('巴斯夫 BASF','全球最大化工公司之一，"一体化生产基地"（Verbund）模式降低能耗与物料损耗成本。')
+    ]),
+    stage('中游·精细化工',[
+      co('荣盛石化','民营大炼化一体化企业，原油进口—炼化—化纤全产业链一体化，压缩中间环节成本。')
+    ]),
+    stage('下游·新材料应用',[
+      co('恩捷股份','全球锂电池隔膜龙头，通过高壁垒湿法隔膜工艺绑定动力电池大厂长单供应。'),
+      co('璞泰来','锂电池负极材料及设备供应商，深度受益新能源汽车产业链高景气度。')
+    ])
+  ]),
+  sec('汽车产业','#F44336',[
+    stage('上游·核心零部件',[
+      co('宁德时代','全球动力电池龙头，通过规模化生产、材料体系创新与长期供货协议绑定车企客户。'),
+      co('福耀玻璃','全球汽车玻璃龙头，通过全球化产能布局与主机厂同步开发获取稳定长期订单。')
+    ]),
+    stage('中游·整车制造',[
+      co('比亚迪','电池—电机—电控—整车垂直一体化新能源车企，通过成本控制与规模化实现盈利。'),
+      co('特斯拉 Tesla','智能电动车企，通过直营销售+软件订阅（FSD）+储能业务构建多元盈利模式。'),
+      co('丰田汽车 Toyota','全球最大车企之一，精益生产（TPS）体系+混动技术专利构筑成本与技术双壁垒。')
+    ]),
+    stage('下游·后市场与出行',[
+      co('途虎养车','汽车后市场服务平台，线上引流+线下门店维保，赚取服务与配件差价。'),
+      co('滴滴出行','网约车出行平台，通过抽取司机端订单佣金及广告增值服务盈利。')
+    ])
+  ]),
+  sec('电子信息与半导体','#2196F3',[
+    stage('上游·芯片设计制造',[
+      co('台积电 TSMC','全球最大晶圆代工厂，采用Foundry纯代工模式，为无厂芯片设计公司提供先进制程产能。'),
+      co('中芯国际','中国大陆最大晶圆代工企业，代工模式收取制造服务费，持续扩产成熟及先进制程。'),
+      co('韦尔股份','图像传感器芯片设计公司（Fabless），专注手机/汽车CIS芯片设计并委托代工生产。')
+    ]),
+    stage('中游·电子制造代工',[
+      co('富士康（鸿海精密）','全球最大电子产品代工厂（EMS），为苹果等品牌提供大规模精密组装代工服务。'),
+      co('立讯精密','精密连接器及组装代工企业，通过垂直整合零组件+组装一站式服务绑定大客户。')
+    ]),
+    stage('下游·终端品牌',[
+      co('苹果公司 Apple','消费电子品牌商，自研芯片+软硬件生态闭环+高端品牌溢价+服务订阅收入。'),
+      co('华为','通信设备与智能终端厂商，ToB电信设备+ToC终端+云服务多元业务，技术研发驱动高端化。'),
+      co('小米集团','"硬件+互联网服务+新零售"铁人三项模式，硬件低毛利走量，互联网服务变现流量。')
+    ])
+  ]),
+  sec('建筑与房地产','#FF9800',[
+    stage('上游·建材',[
+      co('海螺水泥','全国水泥龙头，"T型"沿江沿海战略布局降低运输成本，规模化生产获取成本优势。')
+    ]),
+    stage('中游·开发建设',[
+      co('万科','住宅开发运营商，通过"拿地—开发—销售"周转模式及物业增值服务多元化转型。'),
+      co('中国建筑','全球最大建筑工程承包商，工程总承包（EPC）模式赚取施工利润及部分自主投资开发收益。')
+    ]),
+    stage('下游·物业与经纪服务',[
+      co('万物云','物业管理服务商，按面积/合同收取物业费并拓展社区团购、维修等增值服务。'),
+      co('贝壳找房','房产经纪交易平台，整合行业经纪人资源，通过居间服务费（佣金）盈利。')
+    ])
+  ]),
+  sec('消费品与零售','#E91E63',[
+    stage('上游·品牌制造',[
+      co('农夫山泉','天然水及饮料品牌商，自有水源地+高效渠道分销网络实现品牌溢价。'),
+      co('蒙牛乳业','全国性乳品品牌，依托奶源整合与全国经销网络实现规模化销售。')
+    ]),
+    stage('中游·零售渠道',[
+      co('沃尔玛 Walmart','全球最大商超零售商，"天天低价"+强大供应链议价能力，薄利多销。'),
+      co('永辉超市','以生鲜为特色的商超连锁，通过生鲜引流带动全品类销售。')
+    ]),
+    stage('下游·电商与新零售',[
+      co('阿里巴巴','电商平台生态，通过平台佣金、广告（直通车）、云计算等多元业务变现。'),
+      co('拼多多','社交拼团电商，"低价+游戏化裂变"获客，通过广告及交易佣金盈利。'),
+      co('亚马逊 Amazon','电商+云计算（AWS）双引擎，电商薄利多销，AWS高毛利支撑集团利润。')
+    ])
+  ]),
+  sec('交通运输与物流','#3F51B5',[
+    stage('上游·装备制造',[
+      co('中国中车','全球最大轨道交通装备制造商，高铁/地铁列车制造+售后运维服务双轮驱动。'),
+      co('中国船舶','大型船舶及海洋工程装备制造企业，按订单造船并提供配套设备。')
+    ]),
+    stage('中游·运输运营',[
+      co('中国国航','全服务航空公司，通过客运货运运输+航线枢纽（Hub）网络模式盈利。'),
+      co('顺丰控股','直营制快递物流企业，高时效高质量服务定位，赚取时效件溢价运费。')
+    ]),
+    stage('下游·出行与服务平台',[
+      co('携程集团','在线旅游服务平台（OTA），整合机票酒店资源赚取代理佣金及广告费。'),
+      co('满帮集团','公路货运匹配平台"货车帮"，撮合货主与司机赚取会员费及交易服务费。')
+    ])
+  ]),
+  sec('信息技术与互联网','#00BCD4',[
+    stage('上游·基础设施（云与算力）',[
+      co('亚马逊AWS','全球最大云计算服务商，按用量付费（IaaS/PaaS）模式规模化摊薄数据中心成本。'),
+      co('英伟达 NVIDIA','AI芯片龙头，GPU硬件+CUDA软件生态绑定，深度受益全球AI算力需求爆发。')
+    ]),
+    stage('中游·软件与SaaS',[
+      co('微软 Microsoft','操作系统+生产力软件+Azure云+游戏多元业务，订阅制（Microsoft 365）持续收费。'),
+      co('用友网络','企业管理软件及云服务商，从License卖断模式转向云订阅SaaS模式。')
+    ]),
+    stage('下游·互联网平台',[
+      co('腾讯','社交（微信/QQ）+游戏+金融科技+广告平台型公司，流量变现游戏与广告双引擎。'),
+      co('字节跳动','算法推荐内容平台（抖音/TikTok），通过信息流广告及电商直播变现海量流量。'),
+      co('谷歌 Google','搜索引擎+广告（AdWords）+安卓生态，广告竞价拍卖模式为核心收入来源。')
+    ])
+  ]),
+  sec('金融业','#607D8B',[
+    stage('银行',[
+      co('中国工商银行','全球资产规模最大商业银行，存贷利差+中间业务手续费为主要盈利来源。'),
+      co('摩根大通 JPMorgan','全能型投资银行，涵盖零售银行、投行、资管、交易业务多元收入结构。')
+    ]),
+    stage('保险',[
+      co('中国平安','综合金融集团，寿险健康险为核心+"金融+医疗健康"生态协同，通过保费与投资收益盈利。'),
+      co('友邦保险 AIA','亚太区寿险龙头，代理人渠道销售长期保障型保单，赚取承保利润与投资收益。')
+    ]),
+    stage('证券基金与支付',[
+      co('中信证券','综合类证券公司，经纪、投行（承销保荐）、资管、自营多业务线佣金及价差收入。'),
+      co('贝莱德 BlackRock','全球最大资产管理公司，依托规模化被动型ETF（iShares）收取管理费。'),
+      co('支付宝 Alipay','第三方支付及数字生活平台，交易手续费+金融科技（信贷/理财导流）双重变现。')
+    ])
+  ]),
+  sec('医疗健康','#009688',[
+    stage('上游·研发外包',[
+      co('药明康德','全球医药研发生产外包（CXO）龙头，为跨国药企提供从新药发现到生产的一站式服务收费。')
+    ]),
+    stage('中游·药械制造',[
+      co('恒瑞医药','中国创新药龙头，自主研发新药+仿制药一致性评价，专利期内高毛利定价销售。'),
+      co('迈瑞医疗','医疗器械龙头，监护仪/超声/体外诊断设备研发制造，直销+经销覆盖全球医院终端。'),
+      co('辉瑞 Pfizer','全球制药巨头，专利药高定价+疫苗产品组合，专利保护期内获取超额利润。')
+    ]),
+    stage('下游·医疗服务',[
+      co('爱尔眼科','专科连锁医院集团，"分级连锁"模式快速复制医院网络，消费医疗自费项目高毛利。'),
+      co('美年健康','健康体检连锁机构，ToB（企业团检）+ToC（个人体检）双渠道获客。')
+    ])
+  ]),
+  sec('文化传媒与娱乐','#FFC107',[
+    stage('内容制作',[
+      co('华特迪士尼 Disney','全球最大娱乐传媒集团，IP内容制作+主题乐园+流媒体+衍生品全产业链变现。'),
+      co('网易','游戏研发发行龙头，自研精品游戏+音乐（云音乐）+教育多元布局，游戏内购为核心收入。')
+    ]),
+    stage('平台分发',[
+      co('爱奇艺','长视频流媒体平台，会员订阅费+广告+内容分销多元变现。')
+    ]),
+    stage('广告营销',[
+      co('分众传媒','电梯楼宇及影院线下媒体广告运营商，依托稀缺点位资源赚取广告刊例费。')
+    ])
+  ]),
+  sec('教育','#8BC34A',[
+    stage('培训与职教',[
+      co('新东方','教育培训机构，转型农产品直播电商（东方甄选）+留学咨询+高中培训业务组合。'),
+      co('中公教育','职业考试培训机构，"不过退费"模式提高转化率，面授+线上双渠道招生。')
+    ]),
+    stage('高等与在线教育',[
+      co('Coursera','全球在线课程平台，与高校企业合作开课，通过课程订阅及证书认证费盈利。')
+    ])
+  ]),
+  sec('专业服务','#3E2723',[
+    stage('咨询',[
+      co('麦肯锡 McKinsey','全球顶级战略管理咨询公司，按项目收取高额咨询顾问费。')
+    ]),
+    stage('会计与法律',[
+      co('普华永道 PwC','全球四大会计师事务所之一，审计+税务+咨询服务按项目/工时收费。'),
+      co('金杜律师事务所','大型综合性律师事务所，按小时收费或项目收费提供法律服务。')
+    ]),
+    stage('广告与营销',[
+      co('WPP集团','全球最大广告传播集团，整合创意、媒介购买、公关等服务收取代理费佣金。')
+    ])
+  ]),
+  sec('旅游与酒店','#FF5722',[
+    stage('酒店住宿',[
+      co('华住集团','连锁酒店管理集团，"直营+加盟"轻资产扩张，加盟商付管理费/特许经营费。'),
+      co('万豪国际 Marriott','全球最大酒店集团，轻资产特许经营+管理合同模式赚取品牌管理费。')
+    ]),
+    stage('在线旅游',[
+      co('Booking Holdings','全球在线旅游预订巨头（Booking.com），按预订交易金额收取佣金。')
+    ])
+  ]),
+  sec('公用事业','#78909C',[
+    stage('电力燃气水务',[
+      co('长江电力','大型水电运营商，发电成本低且稳定，通过上网电价获取长期稳定现金流。'),
+      co('华润燃气','城市燃气分销运营商，特许经营区域内接驳费+售气价差稳定盈利。'),
+      co('北控水务','水务环保运营商，污水处理特许经营权（BOT/TOT）+处理服务费模式。')
+    ])
+  ])
+];
+
+/* 中国省份产业集群 */
+function region(name,aliases,industries,companies){return {name:name,aliases:aliases,industries:industries,companies:companies};}
+function rc(name,note){return {name:name,note:note};}
+
+const CHINA_REGIONS = [
+  region('广东',['广东','广东省'],['电子信息与半导体','信息技术与互联网','汽车产业','消费品与零售'],[
+    rc('华为','通信设备与智能终端厂商，深圳总部，技术研发驱动高端化'),
+    rc('腾讯','社交+游戏+广告平台型公司，深圳总部'),
+    rc('比亚迪','新能源汽车垂直一体化制造，深圳总部'),
+    rc('格力电器','家电制造企业，自主研发+全国销售网络，珠海总部')
+  ]),
+  region('北京',['北京','北京市'],['信息技术与互联网','金融业','文化传媒与娱乐','专业服务'],[
+    rc('百度','搜索引擎+AI技术平台，广告与云服务变现'),
+    rc('小米集团','"硬件+互联网服务+新零售"生态型公司'),
+    rc('中信集团','大型综合金融控股央企总部'),
+    rc('字节跳动','算法推荐内容平台，总部所在地')
+  ]),
+  region('上海',['上海','上海市'],['金融业','汽车产业','医疗健康','消费品与零售'],[
+    rc('上汽集团','国内领先整车制造企业集团'),
+    rc('中国太保','综合性保险集团总部'),
+    rc('和黄医药','创新药研发企业，聚焦肿瘤及自身免疫疾病'),
+    rc('拼多多','社交拼团电商平台总部')
+  ]),
+  region('浙江',['浙江','浙江省'],['信息技术与互联网','消费品与零售','汽车产业'],[
+    rc('阿里巴巴','电商+云计算平台生态，杭州总部'),
+    rc('吉利汽车','民营整车制造集团，杭州总部'),
+    rc('海康威视','安防视频监控设备龙头，杭州总部'),
+    rc('网易','游戏研发发行龙头，杭州总部')
+  ]),
+  region('江苏',['江苏','江苏省'],['医疗健康','化工与新材料','电子信息与半导体'],[
+    rc('恒瑞医药','中国创新药龙头，连云港总部'),
+    rc('苏宁易购','家电3C连锁零售企业'),
+    rc('长电科技','全球领先的半导体封装测试企业')
+  ]),
+  region('山东',['山东','山东省'],['能源与矿产','农林牧渔业','化工与新材料'],[
+    rc('海尔智家','全球化家电及智慧家庭品牌，青岛总部'),
+    rc('魏桥创业','大型民营铝业与纺织集团'),
+    rc('潍柴动力','大型发动机及装备制造企业')
+  ]),
+  region('四川',['四川','四川省'],['消费品与零售','能源与矿产','电子信息与半导体'],[
+    rc('五粮液','中国高端白酒品牌龙头'),
+    rc('通威股份','光伏硅料与农牧饲料双主业企业'),
+    rc('长虹集团','家电及军工电子制造企业')
+  ]),
+  region('湖北',['湖北','湖北省'],['汽车产业','电子信息与半导体'],[
+    rc('东风汽车','大型整车制造央企集团'),
+    rc('长飞光纤','全球领先的光纤光缆制造企业')
+  ]),
+  region('福建',['福建','福建省'],['消费品与零售','汽车产业','化工与新材料'],[
+    rc('安踏体育','国产运动品牌龙头，多品牌矩阵运营'),
+    rc('宁德时代','全球动力电池龙头，宁德总部'),
+    rc('福耀玻璃','全球汽车玻璃龙头，福清总部')
+  ]),
+  region('陕西',['陕西','陕西省'],['能源与矿产','电子信息与半导体','汽车产业'],[
+    rc('陕西煤业','陕北优质动力煤开采企业'),
+    rc('隆基绿能','全球光伏组件龙头，西安总部'),
+    rc('比亚迪西安基地','新能源汽车重要生产基地')
+  ]),
+  region('山西',['山西','山西省'],['能源与矿产'],[
+    rc('山西焦煤','全国最大炼焦煤生产企业'),
+    rc('潞安化工','煤炭清洁高效利用一体化企业')
+  ]),
+  region('内蒙古',['内蒙古','内蒙古自治区'],['能源与矿产','农林牧渔业'],[
+    rc('伊利股份','全国性乳制品品牌商，呼和浩特总部'),
+    rc('包钢股份','大型钢铁及稀土资源企业')
+  ]),
+  region('河南',['河南','河南省'],['农林牧渔业','交通运输与物流'],[
+    rc('双汇发展','生猪屠宰及肉制品深加工企业，漯河总部'),
+    rc('郑煤机','煤机装备制造企业')
+  ]),
+  region('安徽',['安徽','安徽省'],['汽车产业','消费品与零售','信息技术与互联网'],[
+    rc('蔚来汽车','新能源智能汽车企业，合肥生产基地'),
+    rc('美的合肥基地','家电制造重要生产基地'),
+    rc('科大讯飞','智能语音与人工智能技术企业')
+  ]),
+  region('辽宁',['辽宁','辽宁省'],['能源与矿产','交通运输与物流'],[
+    rc('鞍钢集团','大型钢铁联合企业'),
+    rc('大连船舶重工','大型船舶及海工装备制造企业')
+  ]),
+  region('天津',['天津','天津市'],['交通运输与物流','汽车产业'],[
+    rc('天津港','北方重要国际枢纽港口'),
+    rc('中国一重','重型装备制造央企')
+  ]),
+  region('重庆',['重庆','重庆市'],['汽车产业','电子信息与半导体'],[
+    rc('长安汽车','大型整车制造企业集团'),
+    rc('京东方重庆基地','显示面板重要生产基地')
+  ]),
+  region('广西',['广西','广西壮族自治区'],['汽车产业','农林牧渔业'],[
+    rc('上汽通用五菱','微型车及新能源车制造企业')
+  ]),
+  region('贵州',['贵州','贵州省'],['消费品与零售','信息技术与互联网'],[
+    rc('贵州茅台','中国高端白酒龙头品牌'),
+    rc('货车帮（满帮）','公路货运匹配平台，贵阳大数据中心')
+  ]),
+  region('云南',['云南','云南省'],['医疗健康','能源与矿产','旅游与酒店'],[
+    rc('云南白药','中药创新药及大健康品牌企业'),
+    rc('云南铜业','大型有色金属冶炼企业')
+  ]),
+  region('新疆',['新疆','新疆维吾尔自治区'],['能源与矿产','农林牧渔业'],[
+    rc('特变电工','输变电装备制造及能源企业'),
+    rc('中信国安','棉纺及资源类企业')
+  ]),
+  region('香港',['香港','香港特别行政区'],['金融业','专业服务'],[
+    rc('汇丰控股','国际金融集团亚太区总部所在地'),
+    rc('长江和记实业','综合性跨国企业集团')
+  ]),
+  region('台湾',['台湾','台湾省'],['电子信息与半导体'],[
+    rc('台积电 TSMC','全球最大晶圆代工厂'),
+    rc('鸿海精密（富士康）','全球最大电子产品代工厂')
+  ])
+];
+
+/* 世界主要国家产业集群 */
+const WORLD_REGIONS = [
+  region('美国',['United States','United States of America','USA'],['信息技术与互联网','金融业','能源与矿产','医疗健康'],[
+    rc('苹果公司 Apple','消费电子品牌商，硬件生态+服务订阅'),
+    rc('微软 Microsoft','软件与云计算巨头，订阅制持续收费'),
+    rc('摩根大通 JPMorgan','全能型投资银行'),
+    rc('埃克森美孚 ExxonMobil','全球石油天然气巨头')
+  ]),
+  region('中国',['China'],['电子信息与半导体','信息技术与互联网','制造业'],[
+    rc('阿里巴巴','电商+云计算平台生态'),
+    rc('华为','通信设备与智能终端厂商'),
+    rc('中国工商银行','全球资产规模最大商业银行')
+  ]),
+  region('日本',['Japan'],['汽车产业','电子信息与半导体','消费品与零售'],[
+    rc('丰田汽车 Toyota','精益生产+混动技术双壁垒车企'),
+    rc('索尼 Sony','电子、影音娱乐、游戏多元集团'),
+    rc('基恩士 Keyence','高精密传感器与自动化设备制造商，直销高毛利模式')
+  ]),
+  region('德国',['Germany'],['汽车产业','化工与新材料','信息技术与互联网'],[
+    rc('大众汽车 Volkswagen','欧洲最大整车制造集团'),
+    rc('西门子 Siemens','工业自动化与基础设施技术集团'),
+    rc('SAP','企业管理软件龙头，订阅制ERP云服务')
+  ]),
+  region('韩国',['South Korea','Korea','Republic of Korea'],['电子信息与半导体','汽车产业'],[
+    rc('三星电子 Samsung','存储芯片+消费电子全球龙头'),
+    rc('SK海力士 SK Hynix','全球领先存储芯片制造商'),
+    rc('现代汽车 Hyundai','全球主要整车制造集团')
+  ]),
+  region('英国',['United Kingdom','UK'],['金融业','医疗健康','消费品与零售'],[
+    rc('汇丰控股 HSBC','国际金融集团'),
+    rc('阿斯利康 AstraZeneca','全球制药巨头'),
+    rc('联合利华 Unilever','全球快消品牌集团')
+  ]),
+  region('法国',['France'],['消费品与零售','能源与矿产'],[
+    rc('LVMH','全球最大奢侈品集团，多品牌矩阵+高端定价权'),
+    rc('道达尔能源 TotalEnergies','全球能源巨头'),
+    rc('欧莱雅 L\'Oréal','全球化妆品龙头企业')
+  ]),
+  region('瑞士',['Switzerland'],['医疗健康','金融业'],[
+    rc('诺华 Novartis','全球制药巨头'),
+    rc('罗氏 Roche','全球制药与诊断巨头'),
+    rc('瑞银集团 UBS','全球领先私人银行与资产管理机构')
+  ]),
+  region('荷兰',['Netherlands'],['电子信息与半导体','消费品与零售'],[
+    rc('阿斯麦 ASML','全球唯一高端光刻机制造商，技术垄断定价权'),
+    rc('壳牌 Shell','全球能源巨头')
+  ]),
+  region('印度',['India'],['信息技术与互联网','医疗健康'],[
+    rc('塔塔咨询 TCS','全球领先IT服务外包企业'),
+    rc('信实工业 Reliance','能源、零售、电信多元化集团')
+  ]),
+  region('新加坡',['Singapore'],['金融业','交通运输与物流'],[
+    rc('星展银行 DBS','东南亚领先商业银行'),
+    rc('新加坡港务集团 PSA','全球重要国际枢纽港运营商')
+  ]),
+  region('沙特阿拉伯',['Saudi Arabia'],['能源与矿产'],[
+    rc('沙特阿美 Saudi Aramco','全球最大原油生产与出口企业')
+  ]),
+  region('阿联酋',['United Arab Emirates'],['交通运输与物流','能源与矿产'],[
+    rc('迪拜环球港务 DP World','全球领先港口物流运营商')
+  ]),
+  region('巴西',['Brazil'],['农林牧渔业','能源与矿产'],[
+    rc('淡水河谷 Vale','全球最大铁矿石生产商之一'),
+    rc('JBS','全球最大肉类加工企业')
+  ]),
+  region('澳大利亚',['Australia'],['能源与矿产'],[
+    rc('必和必拓 BHP','全球最大多元化矿业公司之一'),
+    rc('力拓 Rio Tinto','全球领先矿产资源集团')
+  ]),
+  region('加拿大',['Canada'],['金融业','能源与矿产'],[
+    rc('加拿大皇家银行 RBC','北美领先综合金融集团')
+  ]),
+  region('俄罗斯',['Russia','Russian Federation'],['能源与矿产'],[
+    rc('俄罗斯天然气工业 Gazprom','全球最大天然气生产企业'),
+    rc('俄罗斯石油 Rosneft','俄罗斯最大原油生产企业')
+  ]),
+  region('爱尔兰',['Ireland'],['医疗健康','信息技术与互联网'],[
+    rc('辉瑞欧洲总部','跨国药企欧洲运营与税务枢纽'),
+    rc('谷歌欧洲总部','互联网巨头欧洲运营中心')
+  ]),
+  region('以色列',['Israel'],['信息技术与互联网','汽车产业'],[
+    rc('Check Point','全球领先网络安全解决方案提供商'),
+    rc('Mobileye','自动驾驶与高级驾驶辅助系统技术企业')
+  ]),
+  region('越南',['Vietnam'],['电子信息与半导体','消费品与零售'],[
+    rc('三星越南工厂','全球重要智能手机代工生产基地'),
+    rc('耐克越南代工厂','全球运动鞋服重要生产基地')
+  ]),
+  region('墨西哥',['Mexico'],['汽车产业'],[
+    rc('墨西哥汽车代工产业带','承接北美汽车整车与零部件近岸制造')
+  ]),
+  region('南非',['South Africa'],['能源与矿产'],[
+    rc('英美资源集团 Anglo American','全球多元化矿业巨头')
+  ]),
+  region('印度尼西亚',['Indonesia'],['能源与矿产','信息技术与互联网'],[
+    rc('Sea集团','东南亚领先电商与游戏互联网集团'),
+    rc('淡水河谷印尼镍矿','全球重要镍矿资源开发企业')
+  ]),
+  region('瑞典',['Sweden'],['消费品与零售','信息技术与互联网'],[
+    rc('宜家 IKEA','全球家居零售龙头，"平板包装+自提"降本模式'),
+    rc('爱立信 Ericsson','全球领先通信设备制造商')
+  ]),
+  region('丹麦',['Denmark'],['交通运输与物流','医疗健康'],[
+    rc('马士基 Maersk','全球领先航运与物流集团'),
+    rc('诺和诺德 Novo Nordisk','全球糖尿病及减重药物龙头企业')
+  ])
+];
+
+/* ========================= 工具函数 ========================= */
+function normalizeCN(name){
+  return name.replace(/(特别行政区|壮族自治区|回族自治区|维吾尔自治区|自治区|省|市)$/,'');
+}
+function findRegionByName(list, name){
+  const n = normalizeCN(name);
+  return list.find(r => r.aliases.some(a => normalizeCN(a) === n || a === name) || normalizeCN(r.name) === n);
+}
+function findCompany(query){
+  const q = query.trim().toLowerCase();
+  if(!q) return [];
+  const out = [];
+  SECTORS.forEach(s=>{
+    s.chains.forEach(c=>{
+      c.companies.forEach(co=>{
+        const matched = co.name.toLowerCase().includes(q) || s.name.toLowerCase().includes(q);
+        if(matched && out.length<8){
+          out.push({name:co.name, model:co.model, sector:s.name, stage:c.stage});
+        }
+      });
+    });
+  });
+  return out.slice(0,8);
+}
+
+/* ========================= 弹窗 ========================= */
+function showDetail(title, tags, desc){
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalDesc').textContent = desc || '暂无详细简述。';
+  const tagRow = document.getElementById('modalTags');
+  tagRow.innerHTML = '';
+  (tags||[]).forEach(t=>{
+    const s = document.createElement('span');
+    s.textContent = t;
+    tagRow.appendChild(s);
+  });
+  document.getElementById('modalMask').classList.add('show');
+}
+document.getElementById('modalClose').onclick = ()=> document.getElementById('modalMask').classList.remove('show');
+document.getElementById('modalMask').addEventListener('click', e=>{
+  if(e.target.id==='modalMask') e.target.classList.remove('show');
+});
+
+/* ========================= Tab 切换 ========================= */
+const tabBtns = document.querySelectorAll('.tab-btn');
+tabBtns.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    tabBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById(btn.dataset.view).classList.add('active');
+    setTimeout(()=>{
+      if(btn.dataset.view==='v-tree' && sunburstChart) sunburstChart.resize();
+      if(btn.dataset.view==='v-cn' && chinaChart) chinaChart.resize();
+      if(btn.dataset.view==='v-world' && worldChart) worldChart.resize();
+    }, 60);
+  });
+});
+
+/* ========================= 脚本加载（多CDN容错） ========================= */
+function loadScript(urls){
+  return new Promise((resolve,reject)=>{
+    let i=0;
+    function tryNext(){
+      if(i>=urls.length){reject(new Error('all cdn failed'));return;}
+      const s=document.createElement('script');
+      s.src=urls[i++];
+      s.onload=resolve;
+      s.onerror=tryNext;
+      document.head.appendChild(s);
+    }
+    tryNext();
+  });
+}
+function fetchJsonFallback(urls){
+  return urls.reduce((p,url)=> p.catch(()=> fetch(url).then(r=>{
+    if(!r.ok) throw new Error('bad status');
+    return r.json();
+  })), Promise.reject());
+}
+
+let sunburstChart, chinaChart, worldChart;
+
+loadScript([
+  './echarts.min.js',
+  'https://cdn.staticfile.org/echarts/5.5.1/echarts.min.js',
+  'https://cdn.bootcdn.net/ajax/libs/echarts/5.5.1/echarts.min.js',
+  'https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.1/echarts.min.js',
+  'https://unpkg.com/echarts@5.5.1/dist/echarts.min.js'
+]).then(initAll).catch(()=>{
+  document.querySelector('main').innerHTML =
+    '<p style="color:#ff6b6b;padding:40px;text-align:center;">图表库加载失败，请检查网络连接后刷新页面（本页面依赖在线CDN资源）。</p>';
+});
+
+function initAll(){
+  initSunburst();
+  initLegend();
+  initChinaMap();
+  initWorldMap();
+  initSearch();
+}
+
+/* ========================= 旭日图 ========================= */
+function buildSunburstData(){
+  return SECTORS.map(s=>({
+    name:s.name,
+    itemStyle:{color:s.color},
+    children:s.chains.map(c=>({
+      name:c.stage,
+      children:c.companies.map(company=>({
+        name:company.name,
+        value:1,
+        model:company.model,
+        sectorName:s.name,
+        stageName:c.stage
+      }))
+    }))
+  }));
+}
+
+function initSunburst(){
+  sunburstChart = echarts.init(document.getElementById('sunburst'), null, {renderer:'canvas'});
+  const option = {
+    backgroundColor:'transparent',
+    tooltip:{
+      formatter:function(info){
+        return info.name;
+      }
+    },
+    series:[{
+      type:'sunburst',
+      data: buildSunburstData(),
+      radius:[50,'92%'],
+      sort:undefined,
+      emphasis:{focus:'ancestor'},
+      itemStyle:{borderColor:'#0b1120',borderWidth:1.5},
+      label:{color:'#0b1120',fontSize:11},
+      levels:[
+        {},
+        {
+          r0:50, r:'32%',
+          itemStyle:{borderWidth:2},
+          label:{rotate:0,fontSize:12.5,fontWeight:'bold',color:'#0b1120'}
+        },
+        {
+          r0:'32%', r:'62%',
+          label:{align:'center',fontSize:10.5,color:'#0b1120'},
+          itemStyle:{opacity:0.9}
+        },
+        {
+          r0:'62%', r:'92%',
+          label:{position:'outside',silent:false,fontSize:10.5,color:'#e6ecf5'},
+          itemStyle:{opacity:0.85,borderWidth:1}
+        }
+      ]
+    }]
+  };
+  sunburstChart.setOption(option);
+  sunburstChart.on('click', function(params){
+    const d = params.data;
+    if(d && d.model){
+      showDetail(d.name, [d.sectorName, d.stageName], d.model);
+    }
+  });
+  window.addEventListener('resize', ()=> sunburstChart.resize());
+
+  document.getElementById('resetTree').onclick = function(){
+    sunburstChart.setOption(option, true);
+  };
+}
+
+function initLegend(){
+  const box = document.getElementById('legend');
+  SECTORS.forEach(s=>{
+    const chip = document.createElement('div');
+    chip.className='chip';
+    chip.innerHTML = '<span class="dot" style="background:'+s.color+'"></span>' + s.name;
+    box.appendChild(chip);
+  });
+}
+
+/* ========================= 中国地图 ========================= */
+function initChinaMap(){
+  chinaChart = echarts.init(document.getElementById('chinaMap'), null, {renderer:'canvas'});
+  chinaChart.showLoading();
+  fetchJsonFallback([
+    './china.json',
+    'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json',
+    'https://cdn.jsdelivr.net/gh/apache/echarts-examples@master/public/data/asset/geo/china.json'
+  ]).then(geoJson=>{
+    chinaChart.hideLoading();
+    echarts.registerMap('CHINA_MAP', geoJson);
+    const seriesData = geoJson.features.map(f=>{
+      const r = findRegionByName(CHINA_REGIONS, f.properties.name);
+      return {name:f.properties.name, value: r ? r.companies.length : 0};
+    });
+    const option = {
+      backgroundColor:'transparent',
+      tooltip:{
+        trigger:'item',
+        formatter: function(p){
+          const r = findRegionByName(CHINA_REGIONS, p.name);
+          if(!r) return p.name;
+          return p.name + '<br/>主导产业：' + r.industries.slice(0,3).join('、');
+        }
+      },
+      visualMap:{
+        min:0, max:4, show:false,
+        inRange:{color:['#182238','#1f4d6b','#2f7fa8','#4fc3f7']}
+      },
+      series:[{
+        type:'map',
+        map:'CHINA_MAP',
+        roam:true,
+        scaleLimit:{min:1,max:8},
+        label:{show:false},
+        emphasis:{
+          label:{show:true,color:'#0b1120',fontSize:11},
+          itemStyle:{areaColor:'#e0b954'}
+        },
+        itemStyle:{borderColor:'#0b1120',borderWidth:0.6},
+        data: seriesData
+      }]
+    };
+    chinaChart.setOption(option);
+    chinaChart.on('click', function(params){
+      const r = findRegionByName(CHINA_REGIONS, params.name);
+      renderRegionPanel('cnPanel', r, params.name);
+    });
+    document.getElementById('resetCN').onclick = function(){
+      chinaChart.dispatchAction({type:'restore'});
+    };
+  }).catch(()=>{
+    chinaChart.hideLoading();
+    document.getElementById('chinaMap').innerHTML =
+      '<p style="color:#ff6b6b;padding:40px;text-align:center;">中国地图数据加载失败，请检查网络后刷新。</p>';
+  });
+  window.addEventListener('resize', ()=> chinaChart && chinaChart.resize());
+}
+
+/* ========================= 世界地图 ========================= */
+function initWorldMap(){
+  worldChart = echarts.init(document.getElementById('worldMap'), null, {renderer:'canvas'});
+  worldChart.showLoading();
+  fetchJsonFallback([
+    './world.json',
+    'https://echarts.apache.org/examples/data/asset/geo/world.json',
+    'https://cdn.jsdelivr.net/gh/apache/echarts-examples@master/public/data/asset/geo/world.json'
+  ]).then(geoJson=>{
+    worldChart.hideLoading();
+    echarts.registerMap('WORLD_MAP', geoJson);
+    const seriesData = geoJson.features.map(f=>{
+      const nm = f.properties.name;
+      const r = findRegionByName(WORLD_REGIONS, nm);
+      return {name:nm, value: r ? r.companies.length : 0};
+    });
+    const option = {
+      backgroundColor:'transparent',
+      tooltip:{
+        trigger:'item',
+        formatter:function(p){
+          const r = findRegionByName(WORLD_REGIONS, p.name);
+          if(!r) return p.name;
+          return r.name + '<br/>主导产业：' + r.industries.slice(0,3).join('、');
+        }
+      },
+      visualMap:{
+        min:0, max:4, show:false,
+        inRange:{color:['#182238','#1f4d6b','#2f7fa8','#4fc3f7']}
+      },
+      series:[{
+        type:'map',
+        map:'WORLD_MAP',
+        roam:true,
+        scaleLimit:{min:1,max:8},
+        label:{show:false},
+        emphasis:{
+          label:{show:true,color:'#0b1120',fontSize:11},
+          itemStyle:{areaColor:'#e0b954'}
+        },
+        itemStyle:{borderColor:'#0b1120',borderWidth:0.4},
+        data: seriesData
+      }]
+    };
+    worldChart.setOption(option);
+    worldChart.on('click', function(params){
+      const r = findRegionByName(WORLD_REGIONS, params.name);
+      renderRegionPanel('worldPanel', r, params.name);
+    });
+    document.getElementById('resetWorld').onclick = function(){
+      worldChart.dispatchAction({type:'restore'});
+    };
+  }).catch(()=>{
+    worldChart.hideLoading();
+    document.getElementById('worldMap').innerHTML =
+      '<p style="color:#ff6b6b;padding:40px;text-align:center;">世界地图数据加载失败，请检查网络后刷新。</p>';
+  });
+  window.addEventListener('resize', ()=> worldChart && worldChart.resize());
+}
+
+function renderRegionPanel(panelId, region, fallbackName){
+  const panel = document.getElementById(panelId);
+  if(!region){
+    panel.innerHTML = '<h3>'+fallbackName+'</h3><div class="placeholder">暂无该地区的产业数据收录。</div>';
+    return;
+  }
+  let html = '<h3>'+region.name+'</h3><div class="indChips">';
+  region.industries.forEach(i=> html += '<span>'+i+'</span>');
+  html += '</div>';
+  region.companies.forEach((c,idx)=>{
+    html += '<div class="coCard" data-idx="'+idx+'"><b>'+c.name+'</b><p>'+c.note+'</p></div>';
+  });
+  panel.innerHTML = html;
+  panel.querySelectorAll('.coCard').forEach((el,idx)=>{
+    el.onclick = ()=>{
+      const c = region.companies[idx];
+      showDetail(c.name, [region.name], c.note);
+    };
+  });
+}
+
+/* ========================= 搜索 ========================= */
+function initSearch(){
+  const box = document.getElementById('searchBox');
+  const results = document.getElementById('searchResults');
+  box.addEventListener('input', function(){
+    const matches = findCompany(box.value);
+    if(!matches.length){ results.style.display='none'; return; }
+    results.innerHTML = matches.map((m,i)=>
+      '<div data-idx="'+i+'">'+m.name+'<span class="tag">'+m.sector+' · '+m.stage+'</span></div>'
+    ).join('');
+    results.style.display='block';
+    results.querySelectorAll('div').forEach((el,i)=>{
+      el.onclick = ()=>{
+        const m = matches[i];
+        showDetail(m.name, [m.sector, m.stage], m.model);
+        results.style.display='none';
+        box.value='';
+      };
+    });
+  });
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.searchWrap')) results.style.display='none';
+  });
+}
+</script>
+</body>
+</html>
