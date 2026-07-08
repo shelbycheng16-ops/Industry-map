@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商业模式与认知大全 | 穿越古今的生意底层逻辑</title>
+<style>
+  :root{
+    --bg:#0b1120; --panel:#121a2b; --panel2:#182238; --border:#26324a;
+    --text:#e6ecf5; --text-dim:#93a1bd; --accent:#e0b954; --accent2:#4fc3f7;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+    background:radial-gradient(circle at 20% -10%, #1a2740 0%, var(--bg) 55%) fixed;color:var(--text);
+    line-height:1.9;}
+  a{color:var(--accent2);}
+  header{padding:26px 28px 18px;border-bottom:1px solid var(--border);
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;
+    background:linear-gradient(180deg, rgba(224,185,84,0.06), transparent);}
+  header h1{margin:0;font-size:23px;letter-spacing:1px;}
+  header h1 span{color:var(--accent);}
+  header .sub{color:var(--text-dim);font-size:12.5px;margin-top:6px;}
+  .backLink{background:var(--panel2);border:1px solid var(--border);color:var(--text-dim);
+    padding:8px 16px;border-radius:999px;font-size:13px;text-decoration:none;white-space:nowrap;}
+  .backLink:hover{color:var(--accent2);border-color:var(--accent2);}
+
+  .layout{max-width:1280px;margin:0 auto;padding:28px 28px 60px;display:flex;gap:28px;align-items:flex-start;}
+  nav.toc{width:230px;flex-shrink:0;position:sticky;top:24px;background:var(--panel);
+    border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;max-height:88vh;overflow:auto;}
+  nav.toc h4{margin:0 0 10px;font-size:12px;color:var(--text-dim);letter-spacing:1px;font-weight:500;}
+  nav.toc a{display:block;font-size:13px;color:var(--text);text-decoration:none;padding:6px 8px;
+    border-radius:8px;margin-bottom:2px;}
+  nav.toc a:hover{background:var(--panel2);color:var(--accent2);}
+  nav.toc .sub-link{padding-left:20px;font-size:12px;color:var(--text-dim);}
+
+  main{flex:1;min-width:0;}
+  .intro{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px 26px;margin-bottom:28px;color:var(--text-dim);font-size:14px;}
+  .intro b{color:var(--accent);}
+
+  section{margin-bottom:44px;}
+  section > h2{font-size:20px;margin:0 0 6px;color:var(--accent);border-left:4px solid var(--accent);
+    padding-left:12px;}
+  section > .sectionDesc{color:var(--text-dim);font-size:13px;margin:8px 0 20px 16px;}
+
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px 24px;margin-bottom:18px;}
+  .card h3{margin:0 0 12px;font-size:16.5px;color:var(--text);}
+  .card h3 .num{color:var(--accent);margin-right:8px;}
+  .card .block{margin-bottom:12px;}
+  .card .block:last-child{margin-bottom:0;}
+  .card .label{font-size:11.5px;color:var(--accent2);letter-spacing:1px;margin-bottom:4px;font-weight:600;}
+  .card p{margin:0;font-size:14px;color:var(--text);}
+  .card .insight p{color:var(--text);background:rgba(224,185,84,0.08);border-left:3px solid var(--accent);
+    padding:10px 14px;border-radius:0 8px 8px 0;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px;}
+  .modelCard{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:18px 20px;}
+  .modelCard .tag{display:inline-block;background:var(--panel2);color:var(--accent);
+    font-size:11px;padding:2px 10px;border-radius:999px;margin-bottom:8px;}
+  .modelCard h4{margin:0 0 8px;font-size:15px;}
+  .modelCard p{margin:0;font-size:13.5px;color:var(--text-dim);}
+
+  .checklist{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:24px 26px;}
+  .checklist ol{margin:0;padding-left:22px;}
+  .checklist li{margin-bottom:14px;font-size:14.5px;}
+  .checklist li b{color:var(--accent2);}
+
+  footer{text-align:center;color:var(--text-dim);font-size:11.5px;padding:20px;opacity:.7;}
+
+  @media (max-width:900px){
+    .layout{flex-direction:column;}
+    nav.toc{position:static;width:100%;max-height:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>商业模式与<span>认知大全</span></h1>
+    <div class="sub">一位经济学家与企业家眼中，穿越古今中外的生意底层逻辑</div>
+  </div>
+  <a class="backLink" href="../index.html">← 返回产业全景图谱</a>
+</header>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h4>目录</h4>
+    <a href="#intro">导语</a>
+    <a href="#part1">一、十条穿越千年的认知</a>
+    <a class="sub-link" href="#p1-1">1. 贱买贵卖</a>
+    <a class="sub-link" href="#p1-2">2. 薄利多销 vs 待价而沽</a>
+    <a class="sub-link" href="#p1-3">3. 大数法则与保险</a>
+    <a class="sub-link" href="#p1-4">4. 信用即资本</a>
+    <a class="sub-link" href="#p1-5">5. 分工创造效率</a>
+    <a class="sub-link" href="#p1-6">6. 时间的价格</a>
+    <a class="sub-link" href="#p1-7">7. 看不见的手</a>
+    <a class="sub-link" href="#p1-8">8. 关系网络资产</a>
+    <a class="sub-link" href="#p1-9">9. 稀缺性定价</a>
+    <a class="sub-link" href="#p1-10">10. 义利之辨</a>
+    <a href="#part2">二、十二种商业模式</a>
+    <a href="#part3">三、当代六个新认知</a>
+    <a href="#part4">四、企业家自查框架</a>
+  </nav>
+
+  <main>
+    <div class="intro" id="intro">
+      商业的载体一直在变——从丝绸之路的驼队到跨境电商的集装箱，从镖局的保镖费到保险公司的精算模型——但驱动商业运转的<b>底层逻辑变化极慢</b>。
+      本文分四层梳理：<b>十条穿越千年的商业认知</b>（古代起源→现代映射→核心认知），<b>十二种按"钱怎么赚"分类的商业模式</b>，
+      <b>当代新涌现的六个认知模型</b>，以及一份<b>给企业家的自查框架</b>，帮助你把这些认知落到具体生意上。
+    </div>
+
+    <section id="part1">
+      <h2>一、十条穿越千年的商业认知</h2>
+      <div class="sectionDesc">每一条都从古代起源讲起，映射到今天的具体商业实践，提炼出不随时代变化的核心逻辑。</div>
+
+      <div class="card" id="p1-1">
+        <h3><span class="num">01</span>贱买贵卖：商业最原始的套利逻辑</h3>
+        <div class="block"><div class="label">古代起源</div><p>陶朱公范蠡辞官经商，"逐什一之利"，靠对各地物产和价格差的判断三次积累巨富又三次散尽家财，被后世奉为"商圣"。丝绸之路上的粟特商人、地中海的威尼斯商人，本质上都是把甲地便宜的东西运到乙地卖贵。</p></div>
+        <div class="block"><div class="label">现代映射</div><p>跨境电商的价差套利、大宗商品贸易商（嘉能可、托克）、统计套利对冲基金，甚至个人的"海外代购"，都是同一逻辑的现代版本。</p></div>
+        <div class="block insight"><div class="label">核心认知</div><p>一切商业活动的起点都是"信息差+空间差+时间差"套利。技术在压缩这些差距，但只要世界存在信息不对称和地理分割，这个逻辑就不会消失，只会不断向新的差距（数据差、认知差、监管差）迁移。</p></div>
+      </div>
+
+      <div class="card" id="p1-2">
+        <h3><span class="num">02</span>薄利多销 与 待价而沽：两种对立又共存的定价哲学</h3>
+        <div class="block"><div class="label">古代起源</div><p>战国大商人白圭提出"人弃我取，人取我与"——逆周期囤货、追求单位利润；与之相对，盐商、布商等古代商人走的是"薄利多销"路线，靠走量取胜。两种哲学在中国商业史上并行了两千多年。</p></div>
+        <div class="block"><div class="label">现代映射</div><p>沃尔玛"天天低价"、拼多多"低价+走量"是薄利多销的当代样本；茅台、爱马仕的"控量涨价"策略则是待价而沽的当代样本。</p></div>
+        <div class="block insight"><div class="label">核心认知</div><p>定价策略的本质是"周转速度"与"单位毛利"之间的权衡，没有哪种天然更高级，只有是否匹配你所在品类的需求弹性和稀缺性。快消品适合薄利多销；强品牌、强稀缺性的产品适合待价而沽，搞反方向两种策略都会失败。</p></div>
+      </div>
+
+      <div class="card" id="p1-3">
+        <h3><span class="num">03</span>风险分摊与大数法则：保险行业的千年演化</h3>
+        <div class="block"><div class="label">古代起源</div><p>古巴比伦《汉谟拉比法典》中已有"海事借贷"制度——商人借款出海，若船只沉没则不必还款，代价是极高利息，本质是最早的风险转移合约。中国古代镖局收取"镖银"为货主承担运输风险，民间"义仓""社仓"是农业社会最早的互助风险池。</p></div>
+        <div class="block"><div class="label">现代映射</div><p>现代保险业把这套逻辑数学化——只要每个人的风险相互独立、样本量足够大，个体不可预测的风险就能被"大数法则"转化为整体可预测、可定价的确定性产品，精算师本质上是"风险的数学翻译官"。</p></div>
+        <div class="block insight"><div class="label">核心认知</div><p>大数法则不仅催生了保险业，也是金融衍生品、云计算按需付费（把不确定的算力需求打包成整体可预测的资源池）背后的共同数学基础——只要能把大量独立的不确定性聚合起来，就能把风险变成一门生意。</p></div>
+      </div>
+
+      <div class="card" id="p1-4">
+        <h3><span class="num">04</span>信用即资本：商誉的复利效应</h3>
+        <div class="block"><div class="label">古代起源</div><p>明清晋商建立"汇通天下"的票号网络，靠的不是抵押物而是"信誉"——一张异地兑付的银票能被接受，是因为晋商几百年积累下"从不失信"的口碑。徽商讲究"贾而好儒"，用儒家伦理为经商信用背书。</p></div>
+        <div class="block"><div class="label">现代映射</div><p>品牌资产、企业信用评级、支付宝"芝麻信用"、亚马逊卖家的"好评率"，本质都是把"信用"量化成可以被交易、被借贷、被定价的资本。</p></div>
+        <div class="block insight"><div class="label">核心认知</div><p>信用的建立成本极高，但一旦建立会产生复利效应——重复交易的信任成本趋近于零，这也是为什么老字号、百年企业享有远超账面资产的估值溢价。信用是极少数"越用越值钱"的资产。</p></div>
+      </div>
+
+      <div class="card" id="p1-5">
+        <h3><span class="num">05</span>分工创造效率：从"士农工商"到全球供应链</h3>
+        <div class="block"><div class="label">古代起源</div><p>管仲在齐国推行"四民分业"，把社会分成士、农、工、商四大职业群体并让其聚居，是最早的系统性社会分工实践之一。两千多年后，亚当·斯密用"制针工厂"的例子说明分工能让一枚针的产量提升几百倍。</p></div>
+        <div class="block"><div class="label">现代映射</div><p>今天的全球供应链——设计在美国、芯片在台湾、组装在中国——是分工逻辑在全球尺度的终极体现；零工经济、企业外包、专职做一件事的SaaS软件，都是分工逻辑的当代变体。</p></div>
+        <div class="block insight"><div class="label">核心认知</div><p>分工创造效率的边界不是技术能力，而是"交易成本"（科斯定理）——只有当协调外部合作的成本低于企业内部自己做的成本时，分工和外包才划算。这解释了为什么有些企业疯狂一体化，有些疯狂外包。</p></div>
+      </div>
+
+      <div class="card" id="p1-6">
+        <h3><span class="num">06</span>时间的价格：利息与复利的发现</h3>
+        <div class="block"><div class="label">古代起源</div><p>古巴比伦泥板上已有借贷记录和利息计算；中国古代"子钱"、典当行业本质上都在给"钱的时间价值"定价。文艺复兴时期意大利美第奇银行发展出复式记账法，让复利计算第一次被系统化管理。</p></div>
+        <div class="block"><div class="label">现代映射</div><p>现代金融的贴现现金流模型（DCF）、复利投资、信用卡分期利息，都是这同一发现的延伸——爱因斯坦所说"复利是世界第八大奇迹"是对这条古老认知的现代礼赞。</p></div>
+        <div class="block insight"><div class="label">核心认知</div><p>金钱有时间价值，今天的一块钱比明天的一块钱更值钱——这条看似简单的认知是几乎所有金融产品定价的起点，理解了它就理解了金融的第一性原理。</p></div>
+      </div>
+
+      <div class="card" id="p1-7">
+        <h3><span class="num">07</span>看不见的手与看得见的手：市场与干预的永恒博弈</h3>
+        <div class="block"><div class="label">古代起源</div><p>中国古代"常平仓"制度——政府丰年低价收购粮食储存，荒年低价抛售平抑粮价——是最早的国家宏观调控实践之一，比亚当·斯密提出"看不见的手"理论早了近两千年。</p></div>
+        <div class="block"><div class="label">现代映射</div><p>今天的央行公开市场操作、OPEC限产保价、各国产业补贴政策，本质上都是"看得见的手"对价格机制的干预；而全球统一的大宗商品期货市场则是"看不见的手"仍在发挥作用的证明。</p></div>
+        <div class="block insight"><div class="label">核心认知</div><p>完全自由的市场和完全的计划经济历史上都不曾长期稳定存在——真实商业环境永远是市场调节与政策干预的动态混合体，理解你所在行业当下处于这个光谱的哪个位置，比争论"哪种更好"更有实际意义。</p></div>
+      </div>
+
+      <div class="card" id="p1-8">
+        <h3><span class="num">08</span>关系网络是一种资产：从商帮到平台经济</h3>
+        <div class="block"><div class="label">古代起源</div><p>晋商建立"联号"制度，总号与各地分号形成信息共享、资金调拨的商业网络；日本近代"财阀"通过交叉持股把关联企业绑定成利益共同体；北美原住民的potlach礼物经济展示了"送礼建立社会资本"的原始关系型商业形态。</p></div>
+        <div class="block"><div class="label">现代映射</div><p>今天的产业集群（硅谷、深圳电子产业带）、供应链联盟，以及互联网平台的社交网络效应，都是关系网络资产化的当代形式。</p></div>
+        <div class="block insight"><div class="label">核心认知</div><p>关系网络本身就是可以被投资、被复利积累的资产，且具有"边际收益递增"特性——梅特卡夫定律指出网络价值与节点数量的平方成正比，这解释了平台公司为何愿意早期烧钱换网络规模。</p></div>
+      </div>
+
+      <div class="card" id="p1-9">
+        <h3><span class="num">09</span>稀缺性定价：从盐铁专营到奢侈品帝国</h3>
+        <div class="block"><div class="label">古代起源</div><p>中国自汉代起长期推行盐铁官营，因盐是生活必需品又是自然垄断的稀缺资源，掌控它就掌控了近乎无限的定价权；威尼斯共和国曾严格保密玻璃制造技术，立法禁止工匠外流以维持技术垄断。</p></div>
+        <div class="block"><div class="label">现代映射</div><p>戴比尔斯用"钻石恒久远"的营销话术和对全球供给的长期控制人为制造稀缺性认知；现代专利制度、软件著作权，是国家用法律手段人为创造"合法垄断"的稀缺性。</p></div>
+        <div class="block insight"><div class="label">核心认知</div><p>垄断稀缺资源或技术是商业史上最古老也最稳定的超额利润来源。稀缺性可以是自然的（矿产、产区），也可以是人为制造的（品牌叙事、专利）——理解你的护城河属于哪一种，决定了它能维持多久。</p></div>
+      </div>
+
+      <div class="card" id="p1-10">
+        <h3><span class="num">10</span>义利之辨：商业伦理与长期主义的古老张力</h3>
+        <div class="block"><div class="label">古代起源</div><p>儒家"君子喻于义，小人喻于利"的义利之辨，塑造了中国商人"以义制利"的经营哲学——晋商票号讲"诚信为本"，胡雪岩的"戒欺"匾额挂在药号大堂警示后人。中世纪欧洲行会也有禁止哄抬物价的"公道价格"理论。</p></div>
+        <div class="block"><div class="label">现代映射</div><p>今天的ESG投资、企业社会责任（CSR）、"良心品牌"营销，本质上都是这套古老张力在当代资本市场的延续。</p></div>
+        <div class="block insight"><div class="label">核心认知</div><p>短期看，纯粹逐利往往效率更高；长期看，只有把"义"内化为经营纪律的企业，才能穿越多个商业周期存活下来，因为信用和声誉是所有长期博弈中最难伪造的护城河。</p></div>
+      </div>
+    </section>
+
+    <section id="part2">
+      <h2>二、十二种商业模式分类图谱</h2>
+      <div class="sectionDesc">不按行业分，按"钱是怎么赚的"这个机制分类——同一种赚钱机制可以穿越几乎所有行业。</div>
+      <div class="grid">
+        <div class="modelCard"><span class="tag">① 差价模式</span><h4>贸易/零售</h4><p>低价买入、高价卖出赚差价。从丝路商队到跨境电商、大宗商品贸易商，核心能力是信息获取和渠道网络。</p></div>
+        <div class="modelCard"><span class="tag">② 租赁模式</span><h4>资产出租</h4><p>拥有资产按使用量收费而非出售所有权。从古代地租、当铺，到云计算按量计费、共享出行，本质是所有权与使用权分离变现。</p></div>
+        <div class="modelCard"><span class="tag">③ 佣金模式</span><h4>撮合中介</h4><p>不持有商品，靠撮合买卖双方抽佣。从古代"牙行"到房产经纪、电商平台，核心是降低交易双方的搜寻成本。</p></div>
+        <div class="modelCard"><span class="tag">④ 订阅模式</span><h4>经常性收费</h4><p>按周期付费换取持续使用权，把一次性销售转化为可预测的经常性收入。如Netflix、Microsoft 365、山姆会员店。</p></div>
+        <div class="modelCard"><span class="tag">⑤ 保险模式</span><h4>风险定价</h4><p>收保费聚合独立风险，用大数法则转化为可预测整体，赚承保利润+资金运用收益的双重收入。</p></div>
+        <div class="modelCard"><span class="tag">⑥ 平台模式</span><h4>双边市场</h4><p>同时服务互相需要的两类用户群体，平台价值随双边规模同时增长。核心难题是"先有鸡还是先有蛋"的冷启动。</p></div>
+        <div class="modelCard"><span class="tag">⑦ 广告模式</span><h4>注意力变现</h4><p>免费提供内容吸引注意力，再把注意力打包卖给广告主。从报纸电视到搜索引擎、社交媒体，本质是"眼球即商品"。</p></div>
+        <div class="modelCard"><span class="tag">⑧ 特许经营</span><h4>轻资产扩张</h4><p>品牌方输出商标和管理体系，加盟商出资金运营，双方分成。如麦当劳、7-Eleven，把品牌复制的边际成本降到接近于零。</p></div>
+        <div class="modelCard"><span class="tag">⑨ 数据模式</span><h4>数字时代新型资源</h4><p>积累用户行为数据反哺产品迭代或精准营销变现，数据随使用量增加而增值，区别于传统资源的边际耗竭。</p></div>
+        <div class="modelCard"><span class="tag">⑩ 生态闭环</span><h4>锁定与协同变现</h4><p>硬件软件服务深度绑定，让用户进入生态后难以迁移，再通过多个触点持续变现。苹果、微软是典型代表。</p></div>
+        <div class="modelCard"><span class="tag">⑪ 长尾模式</span><h4>海量小众需求聚合</h4><p>互联网消除物理货架限制后，海量长尾商品的总收益可以超过少数畅销品，如亚马逊图书、Netflix内容库。</p></div>
+        <div class="modelCard"><span class="tag">⑫ 一体化模式</span><h4>纵向整合</h4><p>向产业链上下游延伸，掌控原本需外部采购或分销的环节，换取成本控制力和抗风险能力，如比亚迪自研三电系统。</p></div>
+      </div>
+    </section>
+
+    <section id="part3">
+      <h2>三、当代新涌现的六个认知模型</h2>
+      <div class="sectionDesc">这些认知在人类商业史上没有直接的古代对应物，是过去三十年数字化、全球化、算力爆炸真正催生出的新东西——"更新"的部分。</div>
+      <div class="grid">
+        <div class="modelCard"><span class="tag">1</span><h4>网络效应飞轮</h4><p>贝索斯的经典模型：更低价格→更多顾客→更大规模→更低成本→支撑更低价格，形成自我强化的正循环，区别于传统线性增长逻辑。</p></div>
+        <div class="modelCard"><span class="tag">2</span><h4>边际成本趋零经济</h4><p>数字产品生产完成后每多服务一个用户的边际成本几乎为零，是SaaS、流媒体、AI大模型API能极低价格大规模普及的经济学基础。</p></div>
+        <div class="modelCard"><span class="tag">3</span><h4>注意力经济与算法分发</h4><p>信息过剩时代用户注意力成为最稀缺资源，推荐算法精准度直接决定商业价值，是抖音、今日头条崛起背后的核心认知。</p></div>
+        <div class="modelCard"><span class="tag">4</span><h4>C2M反向定制</h4><p>借助数字化订单和柔性供应链，先获取真实需求数据再组织生产，反转"先生产后找市场"逻辑，如SHEIN小单快反模式。</p></div>
+        <div class="modelCard"><span class="tag">5</span><h4>数据资产化</h4><p>用户行为数据被视为可持续积累、可资本化的核心资产，催生"用免费服务换数据"的互联网底层逻辑，也是隐私监管收紧的根源冲突。</p></div>
+        <div class="modelCard"><span class="tag">6</span><h4>ESG与影响力投资</h4><p>资本市场把环境、社会责任、公司治理纳入估值和融资成本定价因子，让"做好事"部分转化为可量化的商业变量。</p></div>
+      </div>
+    </section>
+
+    <section id="part4">
+      <h2>四、给企业家的自查框架</h2>
+      <div class="sectionDesc">当你面对一门具体生意（评估别人的或设计自己的），可以按下面问题依次自查，往往比单纯看财务报表更快看透生意的本质。</div>
+      <div class="checklist">
+        <ol>
+          <li><b>价差来源</b> —— 这门生意的利润来源到底是什么？是信息差、稀缺性、效率差，还是纯粹的品牌溢价？</li>
+          <li><b>定价策略</b> —— 它是薄利多销还是待价而沽？是否匹配这个品类真实的需求弹性？</li>
+          <li><b>风险分摊</b> —— 风险是被谁承担的？能否用大数法则把风险打包分摊？</li>
+          <li><b>信用积累</b> —— 信用/品牌资产积累到了什么阶段？是否具备复利效应？</li>
+          <li><b>分工边界</b> —— 自己做 vs 外包，交易成本算清楚了吗？</li>
+          <li><b>时间价值</b> —— 资金的时间价值有没有被正确计入决策（贴现率、机会成本）？</li>
+          <li><b>市场与政策</b> —— 这个行业当下更受市场驱动还是政策驱动？</li>
+          <li><b>网络规模</b> —— 关系网络/用户网络的规模效应有多强？是否值得早期烧钱换网络？</li>
+          <li><b>护城河来源</b> —— 稀缺性是自然的还是人为构建的？能维持多久？</li>
+          <li><b>长期纪律</b> —— 长期主义和短期逐利之间，你把纪律线画在哪里？</li>
+          <li><b>非线性增长</b> —— 这门生意能否被飞轮化、平台化、订阅化，从而获得非线性增长？</li>
+          <li><b>重构空间</b> —— 是否存在被算法、数据、柔性供应链重构的空间？</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>本文由经济学视角梳理整理，用于建立系统性商业认知框架，不构成具体投资或经营建议。</footer>
+
+</body>
+</html>
